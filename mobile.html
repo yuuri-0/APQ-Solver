@@ -19,12 +19,13 @@
     justify-content: center;
     align-items: stretch;
     padding: 10px;
+    box-sizing: border-box;
   }
 
   .card {
     background: #1f1f26;
     border-radius: 14px;
-    padding: 16px 14px 18px;
+    padding: 14px 14px 16px;
     width: 100%;
     max-width: 420px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.6);
@@ -33,17 +34,24 @@
 
   h1 {
     font-size: 20px;
-    margin: 0 0 4px 0;
+    margin: 0 0 2px 0;
   }
 
   .byline {
     font-size: 13px;
     color: #b4b4c8;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+  }
+
+  .stage-image {
+    width: 100%;
+    border-radius: 8px;
+    margin: 6px 0 8px 0;
+    display: block;
   }
 
   .platform {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 600;
     color: #9eb4ff;
     margin-bottom: 10px;
@@ -51,7 +59,7 @@
 
   label {
     display: block;
-    font-size: 16px;
+    font-size: 15px;
     margin-bottom: 6px;
   }
 
@@ -62,8 +70,8 @@
   }
 
   input[type="tel"] {
-    font-size: 26px;
-    padding: 10px 12px;
+    font-size: 24px;
+    padding: 8px 10px;
     flex: 1;
     border-radius: 10px;
     border: 1px solid #555a80;
@@ -79,21 +87,34 @@
   }
 
   .clear-btn {
-    font-size: 14px;
+    font-size: 13px;
     padding: 8px 10px;
     border-radius: 8px;
     border: 1px solid #555;
     background: #333344;
     color: #f5f5f5;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .clear-btn:active {
     background: #44445a;
   }
 
+  /* On extra small screens, stack input and button to avoid overflow */
+  @media (max-width: 360px) {
+    .input-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .clear-btn {
+      align-self: flex-end;
+    }
+  }
+
   #result-label {
     margin-top: 14px;
-    font-size: 16px;
+    font-size: 15px;
     opacity: 0.9;
   }
 
@@ -110,7 +131,8 @@
     color: #bdbdd0;
   }
 
-  .hint strong {
+  .hint-title {
+    font-weight: 700;
     color: #ffbf69;
   }
 
@@ -131,11 +153,14 @@
   <div class="card">
     <h1>APQ Stage 3 Solver – Mobile</h1>
     <div class="byline">By Yuuri</div>
+
+    <img src="assets/plats-start.jpg" alt="APQ Platforms" class="stage-image">
+
     <div class="platform">Platform: C6D95</div>
 
     <label for="codeInput">Type your code (1–5 digits):</label>
     <div class="input-row">
-      <!-- type="tel" + pattern forces numeric keyboard on phone -->
+      <!-- Phone will show numeric keypad -->
       <input id="codeInput" type="tel"
              inputmode="numeric"
              pattern="[0-9]*"
@@ -149,11 +174,14 @@
     <div id="result"></div>
 
     <div class="hint">
-      <strong>Shortcut:</strong><br>
+      <div class="hint-title">Shortcut:</div>
       If there are three correct numbers on the bottom, e.g. C69.<br><br>
+
       If there are <span class="blue">44</span>, check the rest of the platform; if the next platform is 4, the following two might clear the stage right away.<br><br>
+
       If <span class="blue">A2</span> has 3 slime, the top number correct answer will be <span class="blue">B3</span>.<br>
       If <span class="blue">A3</span> has 3 slime, the top number will be <span class="blue">2B</span>.<br><br>
+
       <span class="blue">All Except</span> 6
     </div>
 
