@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>APQ Stage 3 Auto Solver – Mobile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #101015;
+    color: #f5f5f5;
+  }
+
+  .wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    padding: 10px;
+  }
+
+  .card {
+    background: #1f1f26;
+    border-radius: 14px;
+    padding: 16px 14px 18px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+    box-sizing: border-box;
+  }
+
+  h1 {
+    font-size: 20px;
+    margin: 0 0 4px 0;
+  }
+
+  .byline {
+    font-size: 13px;
+    color: #b4b4c8;
+    margin-bottom: 10px;
+  }
+
+  .platform {
+    font-size: 18px;
+    font-weight: 600;
+    color: #9eb4ff;
+    margin-bottom: 10px;
+  }
+
+  label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  input[type="tel"] {
+    font-size: 26px;
+    padding: 10px 12px;
+    flex: 1;
+    border-radius: 10px;
+    border: 1px solid #555a80;
+    background: #252537;
+    color: #ffffff;
+    box-sizing: border-box;
+  }
+
+  input[type="tel"]:focus {
+    outline: none;
+    border-color: #7d9bff;
+    box-shadow: 0 0 0 2px rgba(125,155,255,0.35);
+  }
+
+  .clear-btn {
+    font-size: 14px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #333344;
+    color: #f5f5f5;
+  }
+
+  .clear-btn:active {
+    background: #44445a;
+  }
+
+  #result-label {
+    margin-top: 14px;
+    font-size: 16px;
+    opacity: 0.9;
+  }
+
+  #result {
+    margin-top: 4px;
+    font-weight: bold;
+    font-size: 30px;
+    letter-spacing: 3px;
+  }
+
+  .hint {
+    margin-top: 14px;
+    font-size: 13px;
+    color: #bdbdd0;
+  }
+
+  .hint strong {
+    color: #ffbf69;
+  }
+
+  .hint .blue {
+    color: #7db4ff;
+    font-weight: 600;
+  }
+
+  .disclaimer {
+    margin-top: 10px;
+    font-size: 11px;
+    color: #aaaaaa;
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="card">
+    <h1>APQ Stage 3 Solver – Mobile</h1>
+    <div class="byline">By Yuuri</div>
+    <div class="platform">Platform: C6D95</div>
+
+    <label for="codeInput">Type your code (1–5 digits):</label>
+    <div class="input-row">
+      <!-- type="tel" + pattern forces numeric keyboard on phone -->
+      <input id="codeInput" type="tel"
+             inputmode="numeric"
+             pattern="[0-9]*"
+             maxlength="5"
+             autocomplete="off"
+             oninput="solve()">
+      <button class="clear-btn" onclick="clearInput()">Clear</button>
+    </div>
+
+    <div id="result-label">Answer:</div>
+    <div id="result"></div>
+
+    <div class="hint">
+      <strong>Shortcut:</strong><br>
+      If there are three correct numbers on the bottom, e.g. C69.<br><br>
+      If there are <span class="blue">44</span>, check the rest of the platform; if the next platform is 4, the following two might clear the stage right away.<br><br>
+      If <span class="blue">A2</span> has 3 slime, the top number correct answer will be <span class="blue">B3</span>.<br>
+      If <span class="blue">A3</span> has 3 slime, the top number will be <span class="blue">2B</span>.<br><br>
+      <span class="blue">All Except</span> 6
+    </div>
+
+    <div class="disclaimer">
+      Disclaimer: This APQ Solver is not a third-party tool that gives you the complete answer automatically. You still need to count the slimes. If you miscount the slimes, the entire answer will be incorrect.
+    </div>
+  </div>
+</div>
+
+<script>
+const mapping = ['C','6','D','9','5'];
+
+function clearInput() {
+  const input = document.getElementById('codeInput');
+  const resultEl = document.getElementById('result');
+  input.value = "";
+  resultEl.innerText = "";
+  input.focus();
+}
+
+function solve() {
+  let input = document.getElementById('codeInput').value.trim();
+  const resultEl = document.getElementById('result');
+
+  if (!input || !input.match(/^[0-9]+$/)) {
+    resultEl.innerText = "";
+    return;
+  }
+
+  let arr = input.split('').map(Number);
+  const len = arr.length;
+  const unique = [...new Set(arr)];
+
+  // All 1s → All Down
+  if (arr.every(v => v === 1)) {
+    resultEl.innerText = "All Down";
+    return;
+  }
+
+  // Only 1s and 2s → smallest-number rule
+  if (unique.every(v => v === 1 || v === 2)) {
+    const smallest = Math.min(...arr);
+    const pos = arr.indexOf(smallest);
+    resultEl.innerText = mapping[pos];
+    return;
+  }
+
+  // 2 and 3 together → exactly 3 correct platforms (fill rest with 3)
+  if (arr.includes(2) && arr.includes(3) && !arr.includes(4)) {
+    let full = arr.slice();
+    while (full.length < 5) full.push(3);
+    let idx = [];
+    for (let i = 0; i < 5; i++) if (full[i] === 3) idx.push(i);
+    idx = idx.slice(0, 3);
+    resultEl.innerText = idx.map(i => mapping[i]).join('');
+    return;
+  }
+
+  // 3 and 4 together → exactly 2 correct platforms (fill rest with 4)
+  if (arr.includes(3) && arr.includes(4) && !arr.includes(2)) {
+    let full = arr.slice();
+    while (full.length < 5) full.push(4);
+    let idx = [];
+    for (let i = 0; i < 5; i++) if (full[i] === 4) idx.push(i);
+    idx = idx.slice(0, 2);
+    resultEl.innerText = idx.map(i => mapping[i]).join('');
+    return;
+  }
+
+  // Normal highest-number rule
+  const max = Math.max(...arr);
+  let ans = "";
+  for (let i = 0; i < len; i++) if (arr[i] === max) ans += mapping[i];
+  resultEl.innerText = ans;
+}
+</script>
+</body>
+</html>
