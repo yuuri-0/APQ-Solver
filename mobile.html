@@ -69,10 +69,11 @@
     align-items: center;
   }
 
-  input[type="tel"] {
+  .input-row input[type="tel"] {
     font-size: 24px;
     padding: 8px 10px;
-    flex: 1;
+    flex: 1 1 60%;
+    max-width: 65%;
     border-radius: 10px;
     border: 1px solid #555a80;
     background: #252537;
@@ -80,32 +81,35 @@
     box-sizing: border-box;
   }
 
-  input[type="tel"]:focus {
+  .input-row input[type="tel"]:focus {
     outline: none;
     border-color: #7d9bff;
     box-shadow: 0 0 0 2px rgba(125,155,255,0.35);
   }
 
   .clear-btn {
-    font-size: 13px;
-    padding: 8px 10px;
-    border-radius: 8px;
-    border: 1px solid #555;
-    background: #333344;
+    font-size: 16px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #777;
+    background: #3a3a50;
     color: #f5f5f5;
     white-space: nowrap;
-    flex-shrink: 0;
+    flex: 0 0 auto;
   }
 
   .clear-btn:active {
-    background: #44445a;
+    background: #4a4a64;
   }
 
-  /* On extra small screens, stack input and button to avoid overflow */
+  /* On extra small screens, stack input and button */
   @media (max-width: 360px) {
     .input-row {
       flex-direction: column;
       align-items: stretch;
+    }
+    .input-row input[type="tel"] {
+      max-width: 100%;
     }
     .clear-btn {
       align-self: flex-end;
@@ -125,19 +129,34 @@
     letter-spacing: 3px;
   }
 
-  .hint {
+  .examples {
     margin-top: 14px;
+    font-size: 13px;
+    color: #d0d0e0;
+  }
+
+  .examples-title {
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .examples-line {
+    margin: 2px 0;
+  }
+
+  .note {
+    margin-top: 16px;
     font-size: 13px;
     color: #bdbdd0;
   }
 
-  .hint-title {
-    font-weight: 700;
-    color: #ffbf69;
+  .blue {
+    color: #7db4ff;
+    font-weight: 600;
   }
 
-  .hint .blue {
-    color: #7db4ff;
+  .red {
+    color: #ff6b6b;
     font-weight: 600;
   }
 
@@ -173,16 +192,21 @@
     <div id="result-label">Answer:</div>
     <div id="result"></div>
 
-    <div class="hint">
-      <div class="hint-title">Shortcut:</div>
-      If there are three correct numbers on the bottom, e.g. C69.<br><br>
+    <div class="examples">
+      <div class="examples-title">Quick examples:</div>
+      <div class="examples-line">3323 → C69</div>
+      <div class="examples-line">21 → 6</div>
+      <div class="examples-line">223 → D95</div>
+      <div class="examples-line">11 → All Down</div>
+    </div>
 
-      If there are <span class="blue">44</span>, check the rest of the platform; if the next platform is 4, the following two might clear the stage right away.<br><br>
+    <div class="note">
+      If there are <span class="blue">44</span>, check the rest of the platform, if the next platform is 4. The following two might clear the stage right away.<br><br>
 
-      If <span class="blue">A2</span> has 3 slime, the top number correct answer will be <span class="blue">B3</span>.<br>
-      If <span class="blue">A3</span> has 3 slime, the top number will be <span class="blue">2B</span>.<br><br>
-
-      <span class="blue">All Except</span> 6
+      <strong>Shortcut:</strong><br>
+      If there are three correct numbers on the bottom. Eg: C69<br>
+      If <span class="red">A2</span> has 3 slime. The top number correct answer will be <span class="red">B3</span>.<br>
+      If <span class="red">A3</span> has 3 slime. The top number will be <span class="red">2B</span>.<br>
     </div>
 
     <div class="disclaimer">
